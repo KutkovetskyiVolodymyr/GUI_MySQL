@@ -17,6 +17,7 @@ public class SQL {
         user=user1;
         password=password1;
     }
+
     public void mySQLConect(){
         try {
             con = DriverManager.getConnection(url, user, password);
@@ -25,6 +26,7 @@ public class SQL {
             JOptionPane.showMessageDialog(null, "Wrong");
         }
     }
+
     public void closedb() throws SQLException {
         con.close();
         stmt.close();

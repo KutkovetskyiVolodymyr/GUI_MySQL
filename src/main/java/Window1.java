@@ -2,6 +2,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.SQLException;
 
 /**
  * Created by kutkovetskiy on 26.04.2017.
@@ -11,10 +12,11 @@ public class Window1 implements ActionListener {
     JButton button1,leftButton;
     JPanel jPanel= new JPanel();
     JPanel jPanelBig=new JPanel();
-    JPanel jPanelmin=new JPanel();
+    JPanel jPanelmin=new JPanel();JLabel jl1,jl2,jl3,jl4,jl5;
+    Boolean conect=false;
     JTextField tf1, tf2,tf4,tf5;
     JPasswordField tf3;
-
+    SQL sql;
     Window1() {
         frame = new JFrame();
         button1 = new JButton("Відкрити");
@@ -41,6 +43,26 @@ public class Window1 implements ActionListener {
         tf5 = new JTextField();
         tf5.setSize(170,25);
         tf5.setLocation(250,200);
+
+        jl1 = new JLabel("IP");
+        jl1.setSize(170,25);
+        jl1.setLocation(100,1);
+
+        jl2 = new JLabel("Логін");
+        jl2.setSize(170,25);
+        jl2.setLocation(100,50);
+
+        jl3 = new JLabel("Пароль");
+        jl3.setSize(170,25);
+        jl3.setLocation(100,100);
+
+        jl4 = new JLabel("Порт");
+        jl4.setSize(170,25);
+        jl4.setLocation(100,150);
+
+        jl5 = new JLabel("Імя БД");
+        jl5.setSize(170,25);
+        jl5.setLocation(100,200);
 
         Icon leftIcon = UIManager.getIcon("OptionPane.errorIcon");
         leftButton = new JButton("Вихід");
@@ -72,12 +94,56 @@ public class Window1 implements ActionListener {
         jPanel.add(tf4);
         jPanel.add(tf5);
 
+        jPanel.add(jl1);
+        jPanel.add(jl2);
+        jPanel.add(jl3);
+        jPanel.add(jl4);
+        jPanel.add(jl5);
+
         frame.setVisible(true);
         frame.repaint();
         frame.setLocationRelativeTo(null);
     }
+    public void scan(){
+        String ip=tf1.getText();;
+        String user1 =tf2.getText();
+        String password1 =tf3.getText();
+        String port1 =tf4.getText();
+        String namebd =tf5.getText();
+        sql= new SQL(ip,port1,user1, password1,namebd);//
+        sql.mySQLConect();
+        if(sql.con!=null) {
+            conect=true;
+        }
+        else
+            conect=false;
+    }
+
+    public void closeframe() throws SQLException {
+        if(this.conect==true) {
+            jPanel.removeAll();
+            frame.remove(jPanel);
+            frame.repaint();
+            frame.pack();
+            frame.setVisible(false);
+            frame.dispose();
+            frame.setResizable(true);
+
+        }
+    }
 
     public void actionPerformed(ActionEvent e) {
         JButton btn = (JButton)e.getSource();
+        if ( btn == button1 ) {
+            this.scan();
+            try {
+                this.closeframe();
+            } catch (SQLException e1) {
+                e1.printStackTrace();
+            }
+        }
+        else
+            frame.setVisible(false);
     }
 }
+
