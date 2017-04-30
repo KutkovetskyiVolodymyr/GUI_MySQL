@@ -9,6 +9,7 @@ import java.sql.SQLException;
  */
 public class Window1 implements ActionListener {
     JFrame frame;
+    Window2 w2;
     JButton button1,leftButton;
     JPanel jPanel= new JPanel();
     JPanel jPanelBig=new JPanel();
@@ -118,7 +119,6 @@ public class Window1 implements ActionListener {
         else
             conect=false;
     }
-
     public void closeframe() throws SQLException {
         if(this.conect==true) {
             jPanel.removeAll();
@@ -127,7 +127,10 @@ public class Window1 implements ActionListener {
             frame.pack();
             frame.setVisible(false);
             frame.dispose();
-            frame.setResizable(true);
+
+            w2 = new Window2();
+            w2.sql=this.sql;
+            w2.tab();
 
         }
     }
