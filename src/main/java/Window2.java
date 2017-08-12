@@ -195,9 +195,7 @@ public class Window2 extends JFrame implements ActionListener {
             } catch (SQLException e1) {
                 e1.printStackTrace();
             }
-
             frame1(table);
-           // jsp.setVisible(true);
         }
         for(int i=0;i<buttons.length;i++) {
             frame=null;

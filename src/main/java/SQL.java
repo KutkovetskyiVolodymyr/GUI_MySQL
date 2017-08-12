@@ -3,7 +3,6 @@ import java.sql.*;
 import java.util.Vector;
 
 public class SQL {
-
     public Connection con =null;
     Statement stmt;
     ResultSet rs;

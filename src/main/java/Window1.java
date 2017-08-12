@@ -115,7 +115,6 @@ public class Window1 implements ActionListener{
         jPanel.add(leftButton);
 
         jPanel.add(buttonStart);
-
         jPanel.add(tf1);
         jPanel.add(tf2);
         jPanel.add(tf3);
