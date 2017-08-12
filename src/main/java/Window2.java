@@ -12,16 +12,19 @@ public class Window2 extends JFrame implements ActionListener {
     JLabel jl1;
     GridBagConstraints constraints;
     DefaultTableModel dtm   = null;
-    JPanel jpanelleft,jpanelright,jpanelup,jpaneldown;
+    JPanel jPaneLeft, jPanelRight, jPanelUp,jpaneldown;
     JTextField jTextField;
     JFrame frame;
-    JButton jButton,jb,jb1,jb2,jb3,ok,createtable;
+    JButton jButton,jb,jb1,jb2,jb3, button, buttonCreateTable;
     JButton[] buttons;
     SQL sql;
     JScrollPane jsp;
 
+    JFrame jFrameCreate ;
+    JPanel jPTable;
 
-    Window2() {
+    Window2(SQL sql) {
+        this.sql=sql;
         jl1 = new JLabel("Таблиці в БД:");
         jl1.setSize(110,15);
         jl1.setLocation(0,1);
@@ -29,10 +32,10 @@ public class Window2 extends JFrame implements ActionListener {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocation(150, 25);
         setSize(900,700);
-        jpanelleft= new JPanel();
-        jpanelright = new JPanel();
+        jPaneLeft = new JPanel();
+        jPanelRight = new JPanel();
         jpaneldown= new JPanel();
-        jpanelup = new JPanel();
+        jPanelUp = new JPanel();
 
         constraints = new GridBagConstraints();
         setLayout (new GridBagLayout());
@@ -41,21 +44,19 @@ public class Window2 extends JFrame implements ActionListener {
         constraints.weightx=0.1;
         constraints.weighty=1.0;
         constraints.gridheight=2;
-        setInGrid(jpanelleft, x=0, y=0);
+        setInGrid(jPaneLeft, x=0, y=0);
         constraints.gridheight=1;
         //для верхнього
         constraints.weightx=0.2;
         constraints.weighty=0.5;
-        setInGrid(jpanelup, 1, 0);
+        setInGrid(jPanelUp, 1, 0);
         //для нижнього
         constraints.weightx=0.2;
         constraints.weighty=0.5;
         setInGrid(jpaneldown, 1, 1);
 
-
-        jpanelleft.setLayout(null);
-        jpanelleft.setVisible(true);
-
+        jPaneLeft.setLayout(null);
+        jPaneLeft.setVisible(true);
 
         setVisible(true);
         try {
@@ -70,7 +71,7 @@ public class Window2 extends JFrame implements ActionListener {
         createleft(showtable);
     }
 
-    public void getTextArea() throws SQLException {
+    private void getTextArea() throws SQLException {
         area= new JTextArea(1, 1);
         area.setText("Введіть SQL запрос");
         area.setVisible(true);
@@ -78,11 +79,11 @@ public class Window2 extends JFrame implements ActionListener {
         area.setWrapStyleWord(true);
 
         area.setSize(400,50);
-        jpanelup.add(area);
+        jPanelUp.add(area);
         area.setLocation(150,50);
         createright();
     }
-    public void createright(){
+    private void createright(){
 
         jb1=new JButton("Добавити таблицю");
         jb1.setLocation(500,500);
@@ -113,7 +114,7 @@ public class Window2 extends JFrame implements ActionListener {
         frame.setContentPane(panel);
         frame.setVisible(true);
     }
-    public void JScrol(String jSP1) throws SQLException {
+    private void JScrol(String jSP1) throws SQLException {
         table=sql.mySQLqery("select * from "+jSP1);
         frame1(table);
     }
@@ -122,65 +123,54 @@ public class Window2 extends JFrame implements ActionListener {
         constraints.gridy = y;
         add(component, constraints);
     }
-    public void createleft(String[] table){
+    private void createleft(String[] table){
         int down = 20;
         int i=table.length;
 
-        buttons=new JButton[i];//это только массив создан.
-        ok=new JButton("OK");
-        jpanelup.add(ok);
-        ok.setVisible(true);
-        ok.setLocation(100,10);
-        ok.setSize(150,20);
-        ok.addActionListener(this);
+        buttons=new JButton[i];
+        button =new JButton("OK");
+        jPanelUp.add(button);
+        button.setVisible(true);
+        button.setLocation(100,10);
+        button.setSize(150,20);
+        button.addActionListener(this);
 
-        jpanelleft.add(jl1);
-        //for(int   =0 ; i<);
+        jPaneLeft.add(jl1);
+        
         for(int a=0;a<table.length;a++) {
-            buttons[a] = new JButton(table[a]);// вызов конструктора для создания объектов
+            buttons[a] = new JButton(table[a]);
 
             buttons[a].addActionListener(this);;
             buttons[a].setLocation(1,down);
             buttons[a].setSize(150,20);
             buttons[a].setVisible(true);
-            jpanelleft.add(buttons[a]);
+            jPaneLeft.add(buttons[a]);
             down+=22;
         }
-
-/*
-        jpaneldown.add(buttons[5]);
-        jpaneldown.addMouseListener(new MouseAdapter(){
-            @Override
-            public void mousePressed (MouseEvent e){
-                buttons[5].setLocation(e.getX(), e.getY());
-            }
-        });
-*/
-
-        }
-
+    }
     public void actionPerformed(ActionEvent e) {
 
         JButton btn = (JButton)e.getSource();
         if(btn==jb3){
-            jpanelleft.repaint();
+            jPaneLeft.repaint();
             tab();
         }
         if(btn==jb1){
             frame= new JFrame("Створення таблиці");
-
-            JPanel jptable = new JPanel();
+            jFrameCreate = new JFrame();
+            jPTable = new JPanel();
+            jFrameCreate.getContentPane().add(jPTable);
             JTextField jtf,jtf1;
             jtf= new JTextField("Введіть назву таблиці");
             jtf1=new JTextField("Введіть назву полів в таблиці в дужках, вкажіть тип . Наприклад: (Car INT NOT NULL PRIMARY KEY AUTO_INCREMENT, Bike VARCHAR(20)");
             JLabel jl,jl1;
             jl=new JLabel();
             jl1=new JLabel();
-            jptable.add(jtf);
-            jptable.add(jl);
-            jptable.add(jtf1);
-            jptable.add(jl1);
-            createtable = new JButton("Створити");
+            jPTable.add(jtf);
+            jPTable.add(jl);
+            jPTable.add(jtf1);
+            jPTable.add(jl1);
+            buttonCreateTable = new JButton("Створити");
             if(jl1!=null){
                 if(jl==null)
                     jl.setText("Введіть назву таблиці");
@@ -196,10 +186,10 @@ public class Window2 extends JFrame implements ActionListener {
             else{
 
             }
-            frame.setContentPane(jptable);
+            frame.setContentPane(jPTable);
 
         }
-        if(ok==btn){
+        if(button ==btn){
             try {
                 table=sql.mySQLqery(area.getText());
             } catch (SQLException e1) {

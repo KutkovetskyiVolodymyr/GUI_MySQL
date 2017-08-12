@@ -2,30 +2,52 @@ import javax.swing.*;
 import java.sql.*;
 import java.util.Vector;
 
-/**
- * Created by kutkovetskiy on 27.04.2017.
- */
 public class SQL {
+
     public Connection con =null;
     Statement stmt;
     ResultSet rs;
 
     String namebd1,url,user,password;
 
-    SQL(String ip,String port1,String user1, String password1,String namebd){
-        url="jdbc:mysql://"+ip+":"+port1+"/"+namebd;
-        namebd1=namebd;
-        user=user1;
-        password=password1;
+   SQL(String ip,String port1,String user1, String password1,String namebd){
+       url="jdbc:mysql://"+ip+":"+port1+"/"+namebd;
+       namebd1=namebd;
+       user=user1;
+       password=password1;
     }
+    public Boolean qery(String query) throws SQLException {
+        stmt = con.createStatement();
+        rs = stmt.executeQuery(query);
+        if(rs==null)
+                return false;
+        return true;
+    }
+    public JTable mySQLqery(String query) throws SQLException {  //запросы
+        stmt = con.createStatement();
 
-    public void mySQLConect(){
-        try {
-            con = DriverManager.getConnection(url, user, password);
-
-        } catch (SQLException sqlEx) {
-            JOptionPane.showMessageDialog(null, "Wrong");
+        rs = stmt.executeQuery(query);
+        ResultSetMetaData rsmt = rs.getMetaData();
+        int c = rsmt.getColumnCount();
+        Vector column = new Vector(c);
+        for(int i = 1; i <= c; i++)
+        {
+            column.add(rsmt.getColumnName(i));
         }
+        Vector data = new Vector();
+        Vector row = new Vector();
+        while(rs.next())
+        {
+            row = new Vector(c);
+            for(int i = 1; i <= c; i++){
+                row.add(rs.getString(i));
+            }
+            data.add(row);
+        }
+        JTable table = new JTable(data,column);
+        return table;
+
+        //return jsp;
     }
     public String[] showtables() {
         int i = 0;
@@ -59,41 +81,14 @@ public class SQL {
 
         return table;
     }
+    public void mySQLConect(){
+      try {
+          con = DriverManager.getConnection(url, user, password);
 
-    public Boolean qery(String query) throws SQLException {
-        stmt = con.createStatement();
-        rs = stmt.executeQuery(query);
-        if(rs==null)
-            return false;
-        return true;
-    }
-    public JTable mySQLqery(String query) throws SQLException {  //запросы
-        stmt = con.createStatement();
-
-        rs = stmt.executeQuery(query);
-        ResultSetMetaData rsmt = rs.getMetaData();
-        int c = rsmt.getColumnCount();
-        Vector column = new Vector(c);
-        for(int i = 1; i <= c; i++)
-        {
-            column.add(rsmt.getColumnName(i));
+        } catch (SQLException sqlEx) {
+          JOptionPane.showMessageDialog(null, "Wrong");
         }
-        Vector data = new Vector();
-        Vector row = new Vector();
-        while(rs.next())
-        {
-            row = new Vector(c);
-            for(int i = 1; i <= c; i++){
-                row.add(rs.getString(i));
-            }
-            data.add(row);
-        }
-        JTable table = new JTable(data,column);
-        return table;
-
-        //return jsp;
     }
-
     public void closedb() throws SQLException {
         con.close();
         stmt.close();
@@ -101,4 +96,3 @@ public class SQL {
     }
 
 }
-
