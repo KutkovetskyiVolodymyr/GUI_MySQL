@@ -187,7 +187,6 @@ public class Window2 extends JFrame implements ActionListener {
 
             }
             frame.setContentPane(jPTable);
-
         }
         if(button ==btn){
             try {

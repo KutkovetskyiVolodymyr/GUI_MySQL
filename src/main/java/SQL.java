@@ -6,7 +6,6 @@ public class SQL {
     public Connection con =null;
     Statement stmt;
     ResultSet rs;
-
     String namebd1,url,user,password;
 
    SQL(String ip,String port1,String user1, String password1,String namebd){

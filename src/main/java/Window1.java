@@ -113,7 +113,6 @@ public class Window1 implements ActionListener{
 
         jPanelmin.add(new JLabel(new ImageIcon(getClass().getClassLoader().getResource("database (1).jpg"))));
         jPanel.add(leftButton);
-
         jPanel.add(buttonStart);
         jPanel.add(tf1);
         jPanel.add(tf2);
